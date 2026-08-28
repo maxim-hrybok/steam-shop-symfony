@@ -18,6 +18,7 @@
                 <th>Price</th>
                 <th>Stock</th>
                 <th>Status</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -28,6 +29,17 @@
                 <td>${{ product.price }}</td>
                 <td>{{ product.stock }}</td>
                 <td>{{ product.status }}</td>
+                <td style="display: flex; gap: 10px;">
+                    {# edit link #}
+                    <a href="{{ path('app_admin_edit', {'id': product.id}) }}" class="btn-primary" style="padding: 5px 10px; font-size: 0.9rem;">Edit</a>
+
+                    {# Delete form#}
+                    <form method="post" action="{{ path('app_admin_delete', {'id': product.id}) }}" onsubmit="return confirm('Are you shure you wont to delete this product?');">
+                        {# csrf_token() generates token for selected object#}
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+                        <button class="btn-danger" style="padding: 5px 10px; font-size: 0.9rem;">Delete</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

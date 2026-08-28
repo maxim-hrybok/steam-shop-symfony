@@ -3,7 +3,7 @@
 
 {% block body %}
 <main class="panel main-container-sm">
-    <h1>Create New Product</h1>
+    <h1>{{ app.request.attributes.get('_route') == 'app_admin_create' ? 'Create New Product' : 'Edit Product' }}</h1>
 
     {# Автоматический вывод формы. form_start сам добавляет CSRF-токен! #}
     {{ form_start(form) }}

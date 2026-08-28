@@ -51,6 +51,39 @@ final class AdminController extends AbstractController
 
         return $this->render('admin/form.html.twig', [
             'form' => $form,
+        ]);      
+    }
+
+    #[Route('/edit/{id}', name: 'app_admin_edit')]
+    public function edit(Product $product, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Form is automatically populated with the existing product data because of the Product $product parameter in the method signature.
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // no persist(), as Doctrine already knows about this object.
+            // only flush() is needed to save the changes.
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_admin_index');
+        }
+
+        return $this->render('admin/form.html.twig', [
+            'form' => $form,
         ]);
+    }
+
+    // Delete product , restrict to POST method to prevent accidental deletion via GET requests
+    #[Route('/delete/{id}', name: 'app_admin_delete', methods: ['POST'])]
+    public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
+    {
+        // Check CSRF token for security 
+        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($product); // Говорим Doctrine удалить объект
+            $entityManager->flush();          // Выполняем SQL запрос DELETE
+        }
+
+        return $this->redirectToRoute('app_admin_index');
     }
 }
