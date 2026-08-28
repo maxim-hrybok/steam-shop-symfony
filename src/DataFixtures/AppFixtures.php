@@ -2,15 +2,37 @@
 
 namespace App\DataFixtures;
 
+
+use App\Entity\User;
+
 use App\Entity\Product;
 use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
+#hasher import
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
+
 class AppFixtures extends Fixture
 {
+    
+    public function __construct(
+        private UserPasswordHasherInterface $passwordHasher
+    ) {}
+
     public function load(ObjectManager $manager): void
     {
+        $admin = new User();
+        $admin->setEmail('adminka@gmail.com');
+        $admin->setFirstName('Admin');
+        $admin->setRoles(['ROLE_ADMIN']); //Add admin rights
+
+        $hashedPassword = $this->passwordHasher->hashPassword($admin, 'adminka');
+        $admin->setPassword($hashedPassword);
+
+        $manager->persist($admin);
+        
          // 1. create categories as objects and persist them to the database
         $categoryGames = new Category();
         $categoryGames->setName('Steam Games');

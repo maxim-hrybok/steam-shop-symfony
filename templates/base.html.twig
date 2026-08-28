@@ -26,11 +26,17 @@
                     <li><a href="{{ path('app_home') }}">Home</a></li>
                     <li><a href="#">All Products</a></li>
 
-                    {# Проверяем, авторизован ли пользователь #}
+                    {# Check if user is loged in #}
                     {% if app.user %}
-                        <li id="logreg"><a href="{{ path('app_logout') }}">Logout</a></li>
-                        <li id="logreg"><a href="#">Привет, {{ app.user.firstName }}!</a></li>
-                    {% else %}
+                    
+                    {# Check user admin rights #}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path('app_admin') }}" style="color: var(--accent);">Admin Panel</a></li>
+                    {% endif %}
+
+                    <li id="logreg"><a href="{{ path('app_logout') }}">Logout</a></li>
+                    <li id="logreg"><a href="#">Hi, {{ app.user.firstName }}!</a></li>
+                {% else %}
                         <li id="logreg"><a href="{{ path('app_login') }}">Login</a></li>
                         <li id="logreg"><a href="{{ path('app_register') }}">Register</a></li>
                     {% endif %}
@@ -38,7 +44,7 @@
             </nav>
         </header>
 
-        
+
         {% block body %}{% endblock %}
     </body>
 </html>

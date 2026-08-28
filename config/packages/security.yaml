@@ -36,6 +36,8 @@ security:
 
     # Note: Only the *first* matching rule is applied
     access_control:
+    # Any URL starting with /admin now needs ROLE_ADMIN
+    - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 
