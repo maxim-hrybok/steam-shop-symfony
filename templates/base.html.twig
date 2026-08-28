@@ -31,7 +31,7 @@
                     
                     {# Check user admin rights #}
                     {% if is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('app_admin') }}" style="color: var(--accent);">Admin Panel</a></li>
+                        <li><a href="{{ path('app_admin_index') }}" style="color: var(--accent);">Admin Panel</a></li>
                     {% endif %}
 
                     <li id="logreg"><a href="{{ path('app_logout') }}">Logout</a></li>

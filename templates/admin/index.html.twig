@@ -1,20 +1,36 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Admin Dashboard{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<main class="admin-dashboard">
+    <div class="admin-header">
+        <h1>Admin Dashboard - Products</h1>
+        <div class="admin-actions">
+            <a href="{{ path('app_admin_create') }}" class="btn-success">+ Add New Product</a>
+        </div>
+    </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Apache24/htdocs/steam_shop_symfony/src/Controller/AdminController.php</code></li>
-        <li>Your template at <code>C:/Apache24/htdocs/steam_shop_symfony/templates/admin/index.html.twig</code></li>
-    </ul>
-</div>
+    <table class="admin-table mt-2">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>${{ product.price }}</td>
+                <td>{{ product.stock }}</td>
+                <td>{{ product.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</main>
 {% endblock %}
