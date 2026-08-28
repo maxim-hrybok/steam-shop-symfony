@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+<main class="main-container panel" style="text-align: center;">
+    <h1 class="text-primary mb-2">Steam Card Shop</h1>
+    <p class="font-large mb-2">Out products from the database (via Doctrine ORM)</p>
+    
+    <div class="product-grid mt-2">
+        
+        {# Запускаем цикл по переданной переменной products #}
+        {% for product in products %}
+            <div class="card">
+                <div class="card__top">
+                    {# Для примера выведем бейдж со статусом #}
+                    <div class="card__label">{{ product.status }}</div>
+                </div>
+                
+                <div class="card__bottom">
+                    <div class="card__prices">
+                        {# Форматируем цену с помощью встроенного фильтра number_format #}
+                        <span class="price">${{ product.price|number_format(2, '.', ',') }}</span>
+                    </div>
+                    
+                    {# В Symfony Twig мы пишем product.name, а "под капотом" вызывается метод $product->getName() #}
+                    <a href="#" class="card__title">{{ product.name }}</a>
+                    
+                    {# Демонстрация мощи Doctrine: выводим категории, к которым привязан товар! #}
+                    <div style="margin-bottom: 15px; text-align: left;">
+                        {% for category in product.categories %}
+                            <span style="font-size: 12px; background: #3b82f6; padding: 2px 6px; border-radius: 4px; color: white;">
+                                {{ category.name }}
+                            </span>
+                        {% endfor %}
+                    </div>
+
+                    <button class="card__add">Add to Cart (Stock: {{ product.stock }})</button>
+                </div>
+            </div>
+        {% else %}
+            {# Этот блок сработает, если в базе нет ни одного товара #}
+            <p>Товары пока не добавлены.</p>
+        {% endfor %}
+
+    </div>
+</main>
+{% endblock %}

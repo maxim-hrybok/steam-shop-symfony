@@ -1,0 +1,115 @@
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 25px;
+    width: 100%;
+}
+
+.card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+    box-shadow: 0 10px 20px rgba(255, 102, 51, 0.15);
+}
+
+.card__top {
+    height: 220px;
+    position: relative;
+    background-color: #0b1121; /* Darker backdrop for images */
+    padding: 20px;
+}
+
+.card__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.card__image > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.4s ease;
+}
+
+.card:hover .card__image > img {
+    transform: scale(1.08);
+}
+
+.card__label {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: var(--accent);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 5px rgba(255, 102, 51, 0.4);
+}
+
+.card__bottom {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 20px;
+}
+
+.card__prices {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.new-price { font-weight: 700; font-size: 1.25rem; color: var(--accent); margin: 0; }
+.old-price { font-weight: 400; font-size: 0.9rem; color: var(--text-muted); text-decoration: line-through; margin: 0; }
+.price { font-weight: 700; font-size: 1.25rem; color: var(--text-main); margin: 0; }
+
+.card__title {
+    color: var(--text-main);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+.card__title:hover {
+    color: var(--primary);
+}
+
+.card__add {
+    width: 100%;
+    padding: 10px;
+    background: var(--border);
+    color: var(--text-main);
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-family: var(--font-main);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.card:hover .card__add {
+    background: var(--primary);
+    color: white;
+}
+
+.card__add.btn-disabled {
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: var(--danger) !important;
+    cursor: not-allowed;
+}

@@ -1,0 +1,53 @@
+header {
+    background-color: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    max-width: 1200px;
+    display: flex;
+    align-items: center;
+    min-height: 60px;
+}
+
+nav ul li a {
+    display: block;
+    color: var(--text-main);
+    text-decoration: none;
+    padding: 10px 16px;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+nav ul li a:hover {
+    background-color: var(--bg-surface-hover);
+    color: white;
+}
+
+/* Push right-side links (login/cart) to the end */
+.logreg{
+    margin-left: auto; 
+}
+
+.cart-link {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+}
+
+.cart-badge {
+    background-color: var(--accent);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 12px;
+}

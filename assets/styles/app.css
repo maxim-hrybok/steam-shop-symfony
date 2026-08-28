@@ -1,3 +1,10 @@
-body {
+/*base styles*/
+/* body {
     background-color: skyblue;
-}
+} */
+
+/* --- Подключаем нашу тёмную тему --- */
+@import 'layout.css';
+@import 'header.css';
+@import 'card.css';
+@import 'product-detail.css';

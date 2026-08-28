@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register | Steam Card Shop{% endblock %}
+
+{% block body %}
+<main class="auth-container">
+    <h2>Create an Account</h2>
+
+    {# output of errors from the form  #}
+    {{ form_errors(registrationForm) }}
+
+    {# open tag <form> #}
+    {{ form_start(registrationForm) }}
+    
+        <div class="form-group">
+            {# firstName with CSS class form-control #}
+            {{ form_row(registrationForm.firstName, {
+                'attr': {'class': 'form-control'}
+            }) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_row(registrationForm.email, {
+                'attr': {'class': 'form-control'}
+            }) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_row(registrationForm.plainPassword, {
+                'label': 'Password',
+                'attr': {'class': 'form-control'}
+            }) }}
+        </div>
+
+        <div class="form-group" style="display: flex; gap: 10px; align-items: center;">
+            {{ form_row(registrationForm.agreeTerms) }}
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 15px;">Register</button>
+        
+    {{ form_end(registrationForm) }}
+</main>
+{% endblock %}

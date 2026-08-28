@@ -1,0 +1,269 @@
+/* =========================================
+   1. Global Variables (Premium Dark Theme)
+   ========================================= */
+:root {
+    --bg-body: #0f172a;           /* Deep slate blue */
+    --bg-surface: #1e293b;        /* Lighter slate for cards/panels */
+    --bg-surface-hover: #334155;
+    
+    --text-main: #f8fafc;         /* White/gray for main text */
+    --text-muted: #94a3b8;        /* Soft gray for descriptions */
+    
+    --accent: #ff6633;            /* Steam shop orange */
+    --accent-hover: #ff8559;
+    
+    --primary: #3b82f6;           /* Modern Blue */
+    --primary-hover: #2563eb;
+    
+    --danger: #ef4444;
+    --success: #10b981;
+    
+    --border: #334155;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --radius: 8px;
+    --font-main: 'Inter', sans-serif;
+}
+
+/* =========================================
+   2. Base Styles
+   ========================================= */
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4 { color: var(--text-main); font-weight: 600; margin-top: 0; }
+a { color: var(--primary); text-decoration: none; transition: 0.2s; }
+a:hover { color: var(--primary-hover); text-decoration: underline; }
+
+/* Layout Containers */
+.main-container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+.main-container-sm { max-width: 800px; margin: 2rem auto; padding: 0 1.5rem; }
+.flex-layout { display: flex; gap: 30px; flex-wrap: wrap; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+
+/* =========================================
+   3. Panels, Sidebar & Cards
+   ========================================= */
+.sidebar, .panel, .admin-panel, .comment-form-box, .comment-card, .order-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+}
+.sidebar { width: 250px; flex-shrink: 0; }
+.panel { margin-top: 2rem; }
+
+/* =========================================
+   4. Forms & Inputs
+   ========================================= */
+.form-label { font-weight: 500; display: block; margin-bottom: 8px; color: var(--text-main); }
+.form-group { margin-bottom: 20px; }
+.form-control, .filter-input, select, input[type="text"], input[type="email"], input[type="password"], input[type="number"], textarea {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: #0b1121;
+    color: var(--text-main);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-family: var(--font-main);
+    transition: 0.2s;
+}
+.form-control:focus, .filter-input:focus, input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* =========================================
+   5. Buttons
+   ========================================= */
+button, .btn-primary, .btn-danger, .btn-category, .btn-secondary, .btn-success {
+    font-family: var(--font-main);
+    font-weight: 600;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+.btn-danger { background: var(--danger); color: white; }
+.btn-category { background: var(--accent); color: white; }
+.btn-secondary { background: var(--bg-surface-hover); color: var(--text-main); border: 1px solid var(--border); }
+.btn-success { background: var(--success); color: white; }
+.btn-disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
+
+/* =========================================
+   6. Tables
+   ========================================= */
+.admin-table, .cart-table { width: 100%; border-collapse: collapse; background: var(--bg-surface); margin-bottom: 20px; border-radius: var(--radius); overflow: hidden; }
+.admin-table th, .cart-table th { background: #0f172a; padding: 15px 12px; text-transform: uppercase; font-size: 0.85rem; color: var(--text-muted); letter-spacing: 0.05em; border-bottom: 2px solid var(--border); text-align: left; }
+.admin-table td, .cart-table td { padding: 12px; border-bottom: 1px solid var(--border); color: var(--text-main); }
+.admin-table tr:hover, .cart-table tr:hover { background: var(--bg-surface-hover); }
+
+/* Alerts & Statuses */
+.alert-error { background: rgba(239, 68, 68, 0.1); color: #fca5a5; padding: 12px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.3); margin-bottom: 20px; }
+.alert-success { background: rgba(16, 185, 129, 0.1); color: #6ee7b7; padding: 12px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.3); margin-bottom: 20px; }
+.text-danger { color: #f87171; }
+.text-success { color: #34d399; }
+.text-warning { color: #fbbf24; }
+.text-muted, .text-muted-light { color: var(--text-muted); }
+
+/* Utils */
+.w-15 { width: 15%; }
+.w-40 { width: 40%; }
+.text-center { text-align: center; }
+.d-inline { display: inline; }
+.mt-1 { margin-top: 5px; } .mt-2 { margin-top: 15px; } .mb-2 { margin-bottom: 15px; }
+
+/* =========================================
+   1. Fix Login & Register Forms
+   ========================================= */
+.auth-container {
+    max-width: 400px;
+    margin: 4rem auto;
+    padding: 2.5rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.auth-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Fix Chrome Autofill turning inputs white in dark mode */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #0b1121 inset !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* =========================================
+   2. Fix Checkboxes & Filters Layout
+   ========================================= */
+input[type="checkbox"], input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: var(--primary); /* Makes the checkmark modern blue */
+    cursor: pointer;
+}
+
+.filter-checkbox, .admin-category-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+}
+
+.filter-clear {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+.filter-clear:hover { color: var(--danger); }
+
+/* =========================================
+   3. Restore Pagination
+   ========================================= */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 2.5rem;
+    width: 100%;
+}
+
+.page-link {
+    padding: 8px 14px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-main);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.page-link:hover {
+    background: var(--bg-surface-hover);
+    border-color: var(--primary);
+    color: white;
+}
+
+.page-link.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* =========================================
+   4. Admin Dashboard Fixes
+   ========================================= */
+/* Mute the extremely bright admin buttons */
+.admin-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.admin-actions .btn-category { background-color: #c2410c; } /* Muted orange */
+.admin-actions .btn-danger { background-color: #b91c1c; }   /* Muted red */
+.admin-actions .btn-success { background-color: #047857; }  /* Muted green */
+
+/* Fix the gaps and alignments in the Admin Filter bar */
+.admin-filters {
+    background: var(--bg-surface);
+    padding: 15px;
+    border-radius: var(--radius);
+    margin-bottom: 25px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+    border: 1px solid var(--border);
+}
+.admin-filters > * { margin: 0; }
+
+/* Force exact same height for Inputs, Selects, and Buttons */
+.admin-filter-input, .admin-filter-select, .admin-filters .btn-primary, .admin-filters .btn-secondary {
+    height: 42px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Override old inline styles from the template for the category filter box */
+.admin-categories-filter {
+    background: #0b1121 !important;
+    border: 1px solid var(--border) !important;
+    padding: 0 15px !important;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    height: 42px;
+    border-radius: 6px;
+}
+.admin-categories-filter span { color: var(--text-muted) !important; margin: 0 !important; }
+.admin-categories-filter label { margin: 0; }
