@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block title %}My Orders{% endblock %}
+
+{% block body %}
+<main class="main-container-sm">
+    <h1>My Order History</h1>
+
+    {% if orders is empty %}
+        <p class="panel">You haven't purchased anything yet.</p>
+    {% else %}
+        {% for order in orders %}
+        <div class="order-card mt-2">
+            <div class="order-header flex-between" style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px;">
+                <span><strong>Order #{{ order.id }}</strong></span>
+                <span>Date: {{ order.createdAt|date('M d, Y H:i') }}</span>
+                <span>Status: <strong class="text-warning">{{ order.status|upper }}</strong></span>
+            </div>
+            
+            <table class="order-table" style="width: 100%;">
+                {% for item in order.items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td class="text-center">x{{ item.quantity }}</td>
+                    <td style="text-align: right;">${{ item.price }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            
+            <div class="order-total" style="text-align: right; margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px;">
+                <strong>Total: ${{ order.totalPrice|number_format(2) }}</strong>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</main>
+{% endblock %}

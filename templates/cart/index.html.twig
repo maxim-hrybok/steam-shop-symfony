@@ -42,7 +42,9 @@
             <h2 style="margin-bottom: 15px;">Total: ${{ total|number_format(2) }}</h2>
             
             {% if app.user %}
-                <button class="btn-primary" style="padding: 15px 30px; font-size: 1.1rem;">Checkout with PayPal</button>
+                <form action="{{ path('app_orders_checkout') }}" method="POST">
+                    <button type="submit" class="btn-primary" style="padding: 15px 30px; font-size: 1.1rem;">Checkout</button>
+                </form>
             {% else %}
                 <p><a href="{{ path('app_login') }}" class="text-primary font-weight-bold">Login</a> to Checkout</p>
             {% endif %}

@@ -6,6 +6,7 @@ use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
 /**
  * @extends ServiceEntityRepository<Product>
  */
@@ -16,6 +17,37 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+    /**
+     * @return Paginator Returns a special Doctrine object that automatically calculates the total number of pages
+     */
+    public function getFilteredProducts(int $page = 1, int $limit = 9, string $search = '', array $categories = []): Paginator
+    {
+        // 'p' - is Product
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.status = :status')
+            ->setParameter('status', 'available')
+            ->orderBy('p.id', 'DESC'); 
+
+        // if search term is provided, filter products by name
+        if ($search !== '') {
+            $qb->andWhere('p.name LIKE :search')
+               ->setParameter('search', '%' . $search . '%');
+        }
+
+        // if categories are provided, filter products by categories
+        if (!empty($categories)) {
+            $qb->join('p.categories', 'c') // JOIN делается одной строкой!
+               ->andWhere('c.id IN (:categories)')
+               ->setParameter('categories', $categories);
+        }
+
+        // pagination: set the limit and offset based on the current page
+        $qb->setMaxResults($limit)
+           ->setFirstResult(($page - 1) * $limit);
+
+        // Returns a special Doctrine object that automatically calculates the total number of pages
+        return new Paginator($qb);
+    }
     //    /**
     //     * @return Product[] Returns an array of Product objects
     //     */

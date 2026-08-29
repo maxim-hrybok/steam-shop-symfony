@@ -3,55 +3,94 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-<main class="main-container panel" style="text-align: center;">
-    <h1 class="text-primary mb-2">Steam Card Shop</h1>
-    <p class="font-large mb-2">Out products from the database (via Doctrine ORM)</p>
+<main class="main-container flex-layout" style="margin-top: 2rem;">
     
-    <div class="product-grid mt-2">
-        {% for product in products %}
-            <div class="card">
-                <div class="card__top">
-                    
-                    <a href="{{ path('app_product_show', {'id': product.id}) }}" class="card__image" style="display: block; width: 100%; height: 100%;">
-                        {% if product.imageFilename %}
-                            <img src="{{ asset('uploads/products/' ~ product.imageFilename) }}" alt="{{ product.name }}">
-                        {% else %}
-                            {# Placeholder, if the image is not yet uploaded #}
-                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #0b1121; color: var(--text-muted);">
-                                No Image
-                            </div>
-                        {% endif %}
-                    </a>
-                    
-                    {# Display product status #}
-                    {% if product.status == 'available' %}
-                        <div class="card__label" style="background: var(--success);">Available</div>
-                    {% else %}
-                        <div class="card__label" style="background: var(--danger);">Hidden</div>
-                    {% endif %}
-                </div>
-                
-                <div class="card__bottom">
-                    <div class="card__prices">
-                        <span class="price">${{ product.price|number_format(2, '.', ',') }}</span>
-                    </div>
-                    
-                    <a href="{{ path('app_product_show', {'id': product.id}) }}" class="card__title">{{ product.name }}</a>
-                    
-                    <div style="margin-bottom: 15px; text-align: left;">
-                        {% for category in product.categories %}
-                            <span style="font-size: 12px; background: #3b82f6; padding: 2px 6px; border-radius: 4px; color: white;">
-                                {{ category.name }}
-                            </span>
-                        {% endfor %}
-                    </div>
+    <!-- === Filters === -->
+    <aside class="sidebar">
+        <h3>Filters</h3>
+        {# Form automatically submits a GET request to the current route #}
+        <form action="{{ path('app_home') }}" method="GET">
+            
+            <div class="filter-section mt-2">
+                <label class="filter-label">Search</label>
+                <input type="text" name="search" value="{{ search }}" placeholder="Search products..." class="filter-input">
+            </div>
 
-                    <a href="{{ path('app_cart_add', {'id': product.id}) }}" class="card__add" style="display: block; text-align: center;">Add to Cart (Stock: {{ product.stock }})</a>
-                </div>
+            <div class="filter-section mt-2">
+                <label class="filter-label">Categories</label>
+                {% for cat in allCategories %}
+                    <label class="filter-checkbox">
+                        <input type="checkbox" name="categories[]" value="{{ cat.id }}" {% if cat.id in selectedCategories %}checked{% endif %}>
+                        {{ cat.name }}
+                    </label>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 15px;">Apply Filters</button>
+            <a href="{{ path('app_home') }}" class="filter-clear">Clear Filters</a>
+        </form>
+    </aside>
+
+    <!-- === Product Grid and Pagination === -->
+    <section style="flex: 1;">
+        {% if products|length == 0 %}
+            <div class="panel" style="text-align: center; color: var(--text-muted);">
+                <p>No products found matching your criteria.</p>
             </div>
         {% else %}
-            <p>No products available.</p>
-        {% endfor %}
-    </div>
+            <div class="product-grid">
+                {% for product in products %}
+                    <div class="card">
+                        <div class="card__top">
+                            <a href="{{ path('app_product_show', {'id': product.id}) }}" class="card__image" style="display: block; width: 100%; height: 100%;">
+                                {% if product.imageFilename %}
+                                    <img src="{{ asset('uploads/products/' ~ product.imageFilename) }}" alt="{{ product.name }}">
+                                {% else %}
+                                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #0b1121; color: var(--text-muted);">No Image</div>
+                                {% endif %}
+                            </a>
+                            {% if product.status == 'available' %}
+                                <div class="card__label" style="background: var(--success);">Available</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="card__bottom">
+                            <div class="card__prices">
+                                <span class="price">${{ product.price|number_format(2, '.', ',') }}</span>
+                            </div>
+                            
+                            <a href="{{ path('app_product_show', {'id': product.id}) }}" class="card__title">{{ product.name }}</a>
+                            
+                            <div style="margin-bottom: 15px; text-align: left;">
+                                {% for category in product.categories %}
+                                    <span style="font-size: 12px; background: #3b82f6; padding: 2px 6px; border-radius: 4px; color: white;">{{ category.name }}</span>
+                                {% endfor %}
+                            </div>
+
+                            {% if product.stock > 0 %}
+                                <a href="{{ path('app_cart_add', {'id': product.id}) }}" class="card__add" style="display: block; text-align: center;">Add to Cart (Stock: {{ product.stock }})</a>
+                            {% else %}
+                                <button class="card__add btn-disabled" disabled style="width: 100%; display: block; text-align: center; cursor: not-allowed;">Sold Out</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <!-- === Pagination === -->
+            {% if totalPages > 1 %}
+                <div class="pagination mt-2">
+                    {% for i in 1..totalPages %}
+                        {# Form automatically submits a GET request to the current route #}
+                        <a href="{{ path('app_home', app.request.query.all|merge({'page': i})) }}" 
+                           class="page-link {% if i == currentPage %}active{% endif %}">
+                            {{ i }}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endif %}
+    </section>
+
 </main>
 {% endblock %}

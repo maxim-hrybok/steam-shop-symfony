@@ -13,18 +13,33 @@ class CartService
     ) {}
 
     // Add product to cart
-    public function add(int $id): void
+    public function add(int $id): bool
     {
-        $session = $this->requestStack->getSession();
-        $cart = $session->get('cart', []); 
-
-        if (!empty($cart[$id])) {
-            $cart[$id]++; 
-        } else {
-            $cart[$id] = 1; 
+        $product = $this->productRepository->find($id);
+        if (!$product) {
+            return false;
         }
 
+        $session = $this->requestStack->getSession();
+        $cart = $session->get('cart', []); 
+        
+        $currentQty = $cart[$id] ?? 0;
+
+       
+        if ($currentQty + 1 > $product->getStock()) {
+            
+            /** @disregard */
+            $session->getFlashBag()->add('error', 'Only ' . $product->getStock() . ' pcs of product "' . $product->getName() . '" are available.');
+            return false;
+        }
+
+        $cart[$id] = $currentQty + 1; 
         $session->set('cart', $cart); 
+        
+        // Successfully added to cart
+        /** @disregard */
+        $session->getFlashBag()->add('success', 'Product added to cart!');
+        return true;
     }
 
     // Delete product from cart

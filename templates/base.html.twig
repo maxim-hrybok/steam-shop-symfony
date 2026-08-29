@@ -39,6 +39,7 @@
                         {% endif %}
                     </a>
                 </li>
+                <li><a href="{{ path('app_orders_index')}}">Orders</a></li>
                     {# Check if user is loged in #}
                     {% if app.user %}
                     
@@ -57,7 +58,17 @@
             </nav>
         </header>
 
+        {# flash messages #}
+        <div class="main-container" style="padding-top: 20px; padding-bottom: 0;">
+        {% for message in app.flashes('error') %}
+            <div class="alert-error">{{ message }}</div>
+        {% endfor %}
 
+        
+        {% for message in app.flashes('success') %}
+            <div class="alert-success">{{ message }}</div>
+        {% endfor %}
+    </div>
         {% block body %}{% endblock %}
     </body>
 </html>
