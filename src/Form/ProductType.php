@@ -13,6 +13,10 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+
+//for image upload
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
 class ProductType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -38,6 +42,27 @@ class ProductType extends AbstractType
                     'Unavailable' => 'unavailable',
                 ],
                 'attr' => ['class' => 'form-control']
+            ])
+
+            ->add('image', FileType::class, [
+                'label' => 'Product Image (JPG, PNG, WEBP)',
+                // mapped => false means this field is NOT directly mapped to the database
+                // (since in HTML it's a file, but in the DB we store just a string with the filename)
+                'mapped' => false,
+                'required' => false,
+                'attr' => ['class' => 'form-control'],
+                'constraints' => [
+                    // СОВРЕМЕННЫЙ СИНТАКСИС SYMFONY 8 (Именованные аргументы)
+                    new File(
+                        maxSize: '5M',
+                        mimeTypes: [
+                            'image/jpeg',
+                            'image/png',
+                            'image/webp',
+                        ],
+                        mimeTypesMessage: 'Пожалуйста, загрузите валидное изображение (JPG, PNG, WEBP)'
+                    )
+                ],
             ])
             ->add('categories', EntityType::class, [
                 'class' => Category::class,

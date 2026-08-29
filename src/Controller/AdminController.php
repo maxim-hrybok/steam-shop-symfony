@@ -15,6 +15,8 @@ use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
+use App\Service\FileUploader;
+
 #[Route('/admin')] //This atribute will prefix all routes in this controller with /admin
 final class AdminController extends AbstractController
 {
@@ -28,7 +30,7 @@ final class AdminController extends AbstractController
 
     //Page for creating a new product
     #[Route('/create', name:'app_admin_create')]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    public function create(Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
         $product = new Product();
 
@@ -41,6 +43,14 @@ final class AdminController extends AbstractController
         //if form is send and valided (CSRF checked and no erreors)
         if ($form->isSubmitted() && $form->isValid()) {
 
+        // 1. get file from the form (it named image as we named it in productTipe)
+        $imageFile = $form->get('image')->getData();
+
+        // 2. if file is submited we send it to service
+        if ($imageFile) {
+            $imageFileName = $fileUploader->upload($imageFile);
+            $product->setImageFilename($imageFileName); // Записываем имя файла в Entity
+        }
         //Save object into DB
         $entityManager->persist($product);
         $entityManager->flush();
@@ -55,13 +65,21 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/edit/{id}', name: 'app_admin_edit')]
-    public function edit(Product $product, Request $request, EntityManagerInterface $entityManager): Response
+    public function edit(Product $product, Request $request, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
         // Form is automatically populated with the existing product data because of the Product $product parameter in the method signature.
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+        // 1. get file from the form (it named image as we named it in productTipe)
+        $imageFile = $form->get('image')->getData();
+
+        // 2. if file is submited we send it to service
+        if ($imageFile) {
+            $imageFileName = $fileUploader->upload($imageFile);
+            $product->setImageFilename($imageFileName); // Записываем имя файла в Entity
+        }
             // no persist(), as Doctrine already knows about this object.
             // only flush() is needed to save the changes.
             $entityManager->flush();

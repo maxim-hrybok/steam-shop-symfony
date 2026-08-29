@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }} | Steam Card Shop{% endblock %}
+
+{% block body %}
+<main class="product-detail-container">
+    <article class="product-detail">
+        <div class="product-detail__image-wrapper">
+            {% if product.imageFilename %}
+                <img src="{{ asset('uploads/products/' ~ product.imageFilename) }}" alt="{{ product.name }}">
+            {% else %}
+                <div style="width: 100%; height: 300px; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+                    No image
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="product-detail__info">
+            <h1 class="product-detail__title">{{ product.name }}</h1>
+
+            <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                {% for category in product.categories %}
+                    <span style="font-size: 12px; background: var(--accent); padding: 3px 8px; border-radius: 4px; color: white; font-weight: 500;">
+                        {{ category.name }}
+                    </span>
+                {% endfor %}
+            </div>
+
+            <p class="product-detail__description">
+                {{ product.description|nl2br }}
+            </p>
+
+            <div class="product-detail__pricing">
+                <span class="price">${{ product.price|number_format(2, '.', ',') }}</span>
+            </div>
+            
+            {% if product.stock > 0 %}
+                <div class="text-success mb-2" style="font-weight: 600;">
+                    In Stock: {{ product.stock }}
+                </div>
+                
+                <form action="#" method="POST">
+                    <button type="submit" class="product-detail__add-to-cart">Add to Cart</button>
+                </form>
+            {% else %}
+                <div class="text-danger mb-2 font-large" style="font-weight: 600;">
+                    OUT OF STOCK
+                </div>
+                <button class="product-detail__add-to-cart btn-disabled" disabled>Sold Out</button>
+            {% endif %}
+        </div>
+    </article>
+</main>
+{% endblock %}
