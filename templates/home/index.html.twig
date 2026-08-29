@@ -46,7 +46,7 @@
                         {% endfor %}
                     </div>
 
-                    <button class="card__add">Add to Cart (Stock: {{ product.stock }})</button>
+                    <a href="{{ path('app_cart_add', {'id': product.id}) }}" class="card__add" style="display: block; text-align: center;">Add to Cart (Stock: {{ product.stock }})</a>
                 </div>
             </div>
         {% else %}

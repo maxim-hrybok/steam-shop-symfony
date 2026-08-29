@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+{% block title %}Shopping Cart{% endblock %}
+
+{% block body %}
+<main class="main-container-sm panel">
+    <h1 style="margin-bottom: 20px;">Shopping Cart</h1>
+
+    {% if items is empty %}
+        <p>Your cart is empty. <a href="{{ path('app_home') }}" class="text-primary">Go buy some games!</a></p>
+    {% else %}
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Subtotal</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td style="display: flex; align-items: center; gap: 10px;">
+                        {% if item.product.imageFilename %}
+                            <img src="{{ asset('uploads/products/' ~ item.product.imageFilename) }}" width="40" style="border-radius: 4px;">
+                        {% endif %}
+                        {{ item.product.name }}
+                    </td>
+                    <td>${{ item.product.price|number_format(2) }}</td>
+                    <td style="font-weight: bold;">x{{ item.quantity }}</td>
+                    <td style="font-weight: bold;">${{ (item.product.price * item.quantity)|number_format(2) }}</td>
+                    <td>
+                        <a href="{{ path('app_cart_remove', {'id': item.product.id}) }}" class="text-danger">Remove</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div style="text-align: right; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
+            <h2 style="margin-bottom: 15px;">Total: ${{ total|number_format(2) }}</h2>
+            
+            {% if app.user %}
+                <button class="btn-primary" style="padding: 15px 30px; font-size: 1.1rem;">Checkout with PayPal</button>
+            {% else %}
+                <p><a href="{{ path('app_login') }}" class="text-primary font-weight-bold">Login</a> to Checkout</p>
+            {% endif %}
+        </div>
+    {% endif %}
+</main>
+{% endblock %}

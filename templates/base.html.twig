@@ -25,7 +25,20 @@
                 <ul>
                     <li><a href="{{ path('app_home') }}">Home</a></li>
                     <li><a href="#">All Products</a></li>
+                    {% set cart = app.session.get('cart', []) %}
+                    {% set cartCount = 0 %}
+                    {% for qty in cart %}
+                        {% set cartCount = cartCount + qty %}
+                    {% endfor %}
 
+                <li id="logreg">
+                    <a href="{{ path('app_cart_index') }}" class="cart-link">
+                        Cart
+                        {% if cartCount > 0 %}
+                            <span class="cart-badge">{{ cartCount }}</span>
+                        {% endif %}
+                    </a>
+                </li>
                     {# Check if user is loged in #}
                     {% if app.user %}
                     
