@@ -20,32 +20,58 @@ class ProductRepository extends ServiceEntityRepository
     /**
      * @return Paginator Returns a special Doctrine object that automatically calculates the total number of pages
      */
-    public function getFilteredProducts(int $page = 1, int $limit = 9, string $search = '', array $categories = []): Paginator
-    {
-        // 'p' - is Product
-        $qb = $this->createQueryBuilder('p')
-            ->where('p.status = :status')
-            ->setParameter('status', 'available')
-            ->orderBy('p.id', 'DESC'); 
+    // public function getFilteredProducts(int $page = 1, int $limit = 9, string $search = '', array $categories = []): Paginator
+    // {
+    //     // 'p' - is Product
+    //     $qb = $this->createQueryBuilder('p')
+    //         ->where('p.status = :status')
+    //         ->setParameter('status', 'available')
+    //         ->orderBy('p.id', 'ASC  '); 
 
-        // if search term is provided, filter products by name
+    //     // if search term is provided, filter products by name
+    //     if ($search !== '') {
+    //         $qb->andWhere('p.name LIKE :search')
+    //            ->setParameter('search', '%' . $search . '%');
+    //     }
+
+    //     // if categories are provided, filter products by categories
+    //     if (!empty($categories)) {
+    //         $qb->join('p.categories', 'c') // JOIN делается одной строкой!
+    //            ->andWhere('c.id IN (:categories)')
+    //            ->setParameter('categories', $categories);
+    //     }
+
+    //     // pagination: set the limit and offset based on the current page
+    //     $qb->setMaxResults($limit)
+    //        ->setFirstResult(($page - 1) * $limit);
+
+    //     // Returns a special Doctrine object that automatically calculates the total number of pages
+    //     return new Paginator($qb);
+    // }
+    public function getFilteredProducts(int $page = 1, int $limit = 9, string $search = '', array $categories = [], string $status = 'all'): Paginator
+    {
+        $qb = $this->createQueryBuilder('p')->orderBy('p.id', 'ASC');
+
+        // if status is not 'all', filter products by status
+        if ($status !== 'all') {
+            $qb->andWhere('p.status = :status')
+               ->setParameter('status', $status);
+        }
+
         if ($search !== '') {
             $qb->andWhere('p.name LIKE :search')
                ->setParameter('search', '%' . $search . '%');
         }
 
-        // if categories are provided, filter products by categories
         if (!empty($categories)) {
-            $qb->join('p.categories', 'c') // JOIN делается одной строкой!
+            $qb->join('p.categories', 'c')
                ->andWhere('c.id IN (:categories)')
                ->setParameter('categories', $categories);
         }
 
-        // pagination: set the limit and offset based on the current page
         $qb->setMaxResults($limit)
            ->setFirstResult(($page - 1) * $limit);
 
-        // Returns a special Doctrine object that automatically calculates the total number of pages
         return new Paginator($qb);
     }
     //    /**

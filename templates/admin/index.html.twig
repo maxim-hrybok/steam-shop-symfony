@@ -6,10 +6,37 @@
     <div class="admin-header">
         <h1>Admin Dashboard - Products</h1>
         <div class="admin-actions">
+            <a href="{{ path('app_admin_orders_index') }}" class="btn-danger">Manage Orders</a>
+            <a href="{{ path('app_admin_categories_index') }}" class="btn-category">Manage Categories</a> {# added #}
             <a href="{{ path('app_admin_create') }}" class="btn-success">+ Add New Product</a>
         </div>
     </div>
 
+    <!-- === Filters === -->
+    <form action="{{ path('app_admin_index') }}" method="GET" class="admin-filters mt-2">
+        <input type="text" name="search" value="{{ search }}" placeholder="Search by name..." class="admin-filter-input">
+        
+        <select name="status" class="admin-filter-select">
+            <option value="all" {% if status == 'all' %}selected{% endif %}>All Statuses</option>
+            <option value="available" {% if status == 'available' %}selected{% endif %}>Available</option>
+            <option value="unavailable" {% if status == 'unavailable' %}selected{% endif %}>Unavailable</option>
+        </select>
+
+        <div class="admin-categories-filter">
+            <span style="font-size: 0.8rem; color: var(--text-muted); margin-right: 10px;">Categories:</span>
+            {% for cat in allCategories %}
+                <label class="admin-category-label" style="display: inline-flex; margin-right: 10px;">
+                    <input type="checkbox" name="categories[]" value="{{ cat.id }}" {% if cat.id in selectedCategories %}checked{% endif %}> 
+                    {{ cat.name }}
+                </label>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn-primary">Filter</button>
+        <a href="{{ path('app_admin_index') }}" class="btn-secondary">Reset</a>
+    </form>
+
+    <!-- === Таблица === -->
     <table class="admin-table mt-2">
         <thead>
             <tr>
@@ -26,7 +53,6 @@
             {% for product in products %}
             <tr>
                 <td>{{ product.id }}</td>
-                {# image #}
                 <td>
                     {% if product.imageFilename %}
                         <img src="{{ asset('uploads/products/' ~ product.imageFilename) }}" width="50" style="border-radius: 4px; border: 1px solid var(--border);">
@@ -36,22 +62,46 @@
                 </td>
                 <td>{{ product.name }}</td>
                 <td>${{ product.price }}</td>
-                <td>{{ product.stock }}</td>
-                <td>{{ product.status }}</td>
+                <td>
+                    {# mark low stock in red #}
+                    <span class="{% if product.stock < 5 %}text-danger font-weight-bold{% endif %}">
+                        {{ product.stock }}
+                    </span>
+                </td>
+                <td>
+                    {% if product.status == 'available' %}
+                        <span class="text-success">Available</span>
+                    {% else %}
+                        <span class="text-danger">Hidden</span>
+                    {% endif %}
+                </td>
                 <td style="display: flex; gap: 10px;">
-                    {# edit link #}
                     <a href="{{ path('app_admin_edit', {'id': product.id}) }}" class="btn-primary" style="padding: 5px 10px; font-size: 0.9rem;">Edit</a>
-
-                    {# Delete form#}
-                    <form method="post" action="{{ path('app_admin_delete', {'id': product.id}) }}" onsubmit="return confirm('Are you shure you wont to delete this product?');">
-                        {# csrf_token() generates token for selected object#}
+                    <form method="post" action="{{ path('app_admin_delete', {'id': product.id}) }}" onsubmit="return confirm('Удалить товар?');">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
                         <button class="btn-danger" style="padding: 5px 10px; font-size: 0.9rem;">Delete</button>
                     </form>
                 </td>
             </tr>
+            {% else %}
+            <tr>
+                <td colspan="7" class="text-center">Products not found.</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <!-- === Pagination === -->
+    {% if totalPages > 1 %}
+        <div class="pagination mt-2">
+            {% for i in 1..totalPages %}
+                <a href="{{ path('app_admin_index', app.request.query.all|merge({'page': i})) }}" 
+                   class="page-link {% if i == currentPage %}active{% endif %}">
+                    {{ i }}
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+
 </main>
 {% endblock %}

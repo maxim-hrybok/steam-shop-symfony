@@ -101,6 +101,12 @@
     font-family: var(--font-main);
     cursor: pointer;
     transition: 0.2s;
+
+    display: block;
+    text-align: center;
+    box-sizing: border-box; /* ensure padding is included in width */
+    text-decoration: none !important; /* disable underline for links */
+    line-height: normal;
 }
 
 .card:hover .card__add {

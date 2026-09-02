@@ -22,7 +22,7 @@ class HomeController extends AbstractController
         $limit = 6; // Products per page
 
         // Get filtered products based on search and selected categories
-        $paginator = $productRepository->getFilteredProducts($page, $limit, $search, $selectedCategories);
+        $paginator = $productRepository->getFilteredProducts($page, $limit, $search, $selectedCategories, 'available'); // Only show available products
         
         // Calculate the total number of pages (Rounding up: total products / limit)
         $totalPages = ceil(count($paginator) / $limit);

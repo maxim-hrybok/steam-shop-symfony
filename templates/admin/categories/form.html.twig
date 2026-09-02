@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ isEdit ? 'Edit Category' : 'Create Category' }}{% endblock %}
+
+{% block body %}
+<main class="panel main-container-sm">
+    <h1>{{ isEdit ? 'Edit Category' : 'Create Category' }}</h1>
+
+    {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_row(form.name) }}
+        </div>
+        
+        <div style="display: flex; gap: 10px;">
+            <button type="submit" class="btn-primary" style="flex: 1;">{{ isEdit ? 'Update' : 'Create' }}</button>
+            <a href="{{ path('app_admin_categories_index') }}" class="btn-secondary" style="flex: 1; text-align: center;">Cancel</a>
+        </div>
+    {{ form_end(form) }}
+</main>
+{% endblock %}

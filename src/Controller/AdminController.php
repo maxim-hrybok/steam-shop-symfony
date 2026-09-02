@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+use App\Repository\CategoryRepository; //for filtering by category
+
 //gain access to the request object
 use Symfony\Component\HttpFoundation\Request;
 
@@ -21,10 +23,28 @@ use App\Service\FileUploader;
 final class AdminController extends AbstractController
 {
     #[Route('/admin', name: 'app_admin_index')]
-    public function index(ProductRepository $productRepository): Response
+    public function index(Request $request, ProductRepository $productRepository, CategoryRepository $categoryRepository): Response
     {
+        // read parameters from URL: ?page=1&search=Dota&categories[]=1&status=available
+        $page = $request->query->getInt('page', 1);
+        $search = $request->query->getString('search', '');
+        $status = $request->query->getString('status', 'all'); 
+        $selectedCategories = $request->query->all('categories');
+
+        $limit = 10; // limit of products per page
+
+        // retrive Paginator
+        $paginator = $productRepository->getFilteredProducts($page, $limit, $search, $selectedCategories, $status);
+        $totalPages = ceil(count($paginator) / $limit);
+
         return $this->render('admin/index.html.twig', [
-            'products' => $productRepository->findAll(),
+            'products' => $paginator,
+            'allCategories' => $categoryRepository->findAll(),
+            'selectedCategories' => $selectedCategories,
+            'search' => $search,
+            'status' => $status,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
         ]);
     }
 

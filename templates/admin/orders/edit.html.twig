@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+{% block title %}Order #{{ order.id }} Details{% endblock %}
+
+{% block body %}
+<main class="admin-dashboard">
+    <div class="admin-header">
+        <h1>Order #{{ order.id }} Details</h1>
+        <a href="{{ path('app_admin_orders_index') }}" class="btn-secondary">&larr; Back to Orders</a>
+    </div>
+
+    <div class="panel flex-between mt-2">
+        <div>
+            <p><strong>Customer:</strong> {{ order.user.firstName }} ({{ order.user.email }})</p>
+            <p><strong>Date:</strong> {{ order.createdAt|date('Y-m-d H:i') }}</p>
+        </div>
+        <div style="text-align: right;">
+            <p style="font-size: 1.2rem;"><strong>Total Paid:</strong> <span class="text-success">${{ order.totalPrice|number_format(2) }}</span></p>
+            
+            {# form for updating status #}
+            <form action="{{ path('app_admin_orders_edit', {'id': order.id}) }}" method="POST" style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                <input type="hidden" name="_token" value="{{ csrf_token('update_status' ~ order.id) }}">
+                
+                <select name="status" class="form-control" style="width: auto;">
+                    <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="completed" {% if order.status == 'completed' %}selected{% endif %}>Completed</option>
+                    <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                </select>
+                
+                <button type="submit" class="btn-primary">Update</button>
+            </form>
+        </div>
+    </div>
+
+    <h2 class="mt-2" style="margin-bottom: 15px;">Purchased Items</h2>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Product Name</th>
+                <th>Qty</th>
+                <th>Price (Each)</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items %}
+            <tr>
+                <td>
+                    {% if item.product.imageFilename %}
+                        <img src="{{ asset('uploads/products/' ~ item.product.imageFilename) }}" width="50" style="border-radius: 4px;">
+                    {% endif %}
+                </td>
+                <td><strong>{{ item.product.name }}</strong></td>
+                <td>x{{ item.quantity }}</td>
+                <td>${{ item.price|number_format(2) }}</td>
+                <td><strong>${{ (item.price * item.quantity)|number_format(2) }}</strong></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}

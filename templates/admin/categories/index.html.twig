@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+{% block title %}Manage Categories{% endblock %}
+
+{% block body %}
+<main class="admin-dashboard">
+    <div class="admin-header">
+        <h1>Manage Categories</h1>
+        <div class="admin-actions">
+            <a href="{{ path('app_admin_index') }}" class="btn-secondary">&larr; Back to Products</a>
+            <a href="{{ path('app_admin_categories_create') }}" class="btn-success">+ Add New Category</a>
+        </div>
+    </div>
+
+    <table class="admin-table mt-2">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th style="width: 60%;">Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td>{{ category.id }}</td>
+                <td><strong>{{ category.name }}</strong></td>
+                <td style="display: flex; gap: 10px;">
+                    <a href="{{ path('app_admin_categories_edit', {'id': category.id}) }}" class="btn-primary" style="padding: 5px 10px; font-size: 0.9rem;">Edit</a>
+                    <form method="post" action="{{ path('app_admin_categories_delete', {'id': category.id}) }}" onsubmit="return confirm('Удалить эту категорию? Товар останется в БД, но лишится этой категории.');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
+                        <button class="btn-danger" style="padding: 5px 10px; font-size: 0.9rem;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3" class="text-center">Категории не найдены.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}

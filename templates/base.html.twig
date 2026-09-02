@@ -59,7 +59,8 @@
         </header>
 
         {# flash messages #}
-        <div class="main-container" style="padding-top: 20px; padding-bottom: 0;">
+        
+        <div class="main-container" style="padding-top: 0px; padding-bottom: 0;">
         {% for message in app.flashes('error') %}
             <div class="alert-error">{{ message }}</div>
         {% endfor %}
