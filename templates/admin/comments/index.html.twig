@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+{% block title %}Moderate Comments{% endblock %}
+
+{% block body %}
+<main class="admin-dashboard">
+    <div class="admin-header">
+        <h1>Moderate Pending Comments</h1>
+        <div class="admin-actions">
+            <a href="{{ path('app_admin_index') }}" class="btn-secondary">&larr; Back to Dashboard</a>
+        </div>
+    </div>
+
+    <table class="admin-table mt-2">
+        <thead>
+            <tr>
+                <th class="w-15">Date</th>
+                <th class="w-15">User</th>
+                <th class="w-15">Product</th>
+                <th class="w-40">Comment</th>
+                <th class="w-15 text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for comment in comments %}
+            <tr>
+                <td>{{ comment.createdAt|date('Y-m-d H:i') }}</td>
+                <td><strong>{{ comment.user.firstName }}</strong><br><small class="text-muted">{{ comment.user.email }}</small></td>
+                {# Ссылка ведет на страницу товара, чтобы админ мог посмотреть контекст #}
+                <td><a href="{{ path('app_product_show', {'id': comment.product.id}) }}" target="_blank">{{ comment.product.name }}</a></td>
+                
+                {# Используем nl2br для сохранения переносов строк #}
+                <td>{{ comment.content|nl2br }}</td>
+                
+                <td class="text-center" style="display: flex; gap: 10px; justify-content: center; flex-direction: column;">
+                    
+                    {# Кнопка ОДОБРИТЬ #}
+                    <form action="{{ path('app_admin_comments_approve', {'id': comment.id}) }}" method="POST">
+                        <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ comment.id) }}">
+                        <button type="submit" class="btn-success" style="width: 100%; padding: 5px; font-size: 0.85rem;">Approve</button>
+                    </form>
+
+                    {# Кнопка ОТКЛОНИТЬ (Удалить) #}
+                    <form action="{{ path('app_admin_comments_delete', {'id': comment.id}) }}" method="POST" onsubmit="return confirm('Отклонить и удалить этот комментарий?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+                        <button type="submit" class="btn-danger" style="width: 100%; padding: 5px; font-size: 0.85rem;">Reject</button>
+                    </form>
+                    
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center" style="padding: 30px; color: var(--text-muted);">
+                    Отличная работа! Нет комментариев, ожидающих модерации.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}
