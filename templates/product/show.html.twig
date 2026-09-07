@@ -3,6 +3,7 @@
 {% block title %}{{ product.name }} | Steam Card Shop{% endblock %}
 
 {% block body %}
+
 <main class="product-detail-container">
     <article class="product-detail">
         <div class="product-detail__image-wrapper">
@@ -56,4 +57,40 @@
         </div>
     </article>
 </main>
+<!-- === Comments Section === -->
+    <section class="comments-section" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+        <h2 style="margin-bottom: 20px;">Customer Reviews & Comments</h2>
+
+        <!-- Form for adding a new comment -->
+        <div class="comment-form-box" style="margin-bottom: 2rem;">
+            {% if app.user %}
+                {{ form_start(form) }}
+                    <div class="form-group">
+                        {{ form_row(form.content) }}
+                    </div>
+                    <button type="submit" class="btn-primary mt-2">Submit Comment</button>
+                {{ form_end(form) }}
+            {% else %}
+                <p>Please <a href="{{ path('app_login') }}" class="text-primary font-weight-bold">Login</a> to leave a comment.</p>
+            {% endif %}
+        </div>
+
+        <!-- List of approved comments -->
+        <div class="comments-list">
+            {% if comments is empty %}
+                <p class="text-muted" style="font-style: italic;">No reviews yet. Be the first to comment!</p>
+            {% else %}
+                {% for comment in comments %}
+                    <div class="comment-card mt-2" style="background: var(--bg-surface-hover); padding: 15px; border-radius: var(--radius);">
+                        <div class="comment-card-header flex-between" style="margin-bottom: 10px;">
+                            <strong class="comment-author" style="color: var(--primary);">{{ comment.user.firstName }}</strong>
+                            <span class="comment-date text-muted" style="font-size: 0.85rem;">{{ comment.createdAt|date('M d, Y H:i') }}</span>
+                        </div>
+                        {# nl2br сохраняет переносы строк, e экранирует HTML от XSS атак #}
+                        <p class="comment-body" style="margin: 0; line-height: 1.5;">{{ comment.content|e|nl2br }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </section>
 {% endblock %}
