@@ -29,6 +29,11 @@ class ProductType extends AbstractType
             ->add('price', NumberType::class, [
                 'attr' => ['class' => 'form-control']
             ])
+            ->add('discount', NumberType::class, [
+                'attr' => ['class' => 'form-control', 'min' => 0, 'max' => 100],
+                'label' => 'Discount (%)',
+                'html5' => true,
+            ])
             ->add('description', TextareaType::class, [
                 'attr' => ['class' => 'form-control', 'rows' => 4],
                 'required' => false,

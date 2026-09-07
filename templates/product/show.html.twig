@@ -31,7 +31,12 @@
             </p>
 
             <div class="product-detail__pricing">
-                <span class="price">${{ product.price|number_format(2, '.', ',') }}</span>
+                {% if product.discount > 0 %}
+                    <span class="new-price">${{ product.getDiscountedPrice()|number_format(2, '.', ',') }}</span>
+                    <span class="old-price" style="text-decoration: line-through; color: var(--text-muted); margin-left: 10px;">${{ product.price|number_format(2, '.', ',') }}</span>
+                {% else %}
+                    <span class="price">${{ product.price|number_format(2, '.', ',') }}</span>
+                {% endif %}
             </div>
             
             {% if product.stock > 0 %}

@@ -40,6 +40,9 @@ class Product
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageFilename = null;
 
+    #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
+    private ?string $discount = '0.00';
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -145,4 +148,30 @@ class Product
 
         return $this;
     }
+
+    public function getDiscount(): ?string
+    {
+        return $this->discount;
+    }
+
+    public function setDiscount(string $discount): static
+    {
+        $this->discount = $discount;
+
+        return $this;
+    }
+    
+    public function getDiscountedPrice(): float
+    {
+        $price = (float) $this->price;
+        $discount = (float) $this->discount;
+        
+        if ($discount > 0) {
+            // Вычисляем новую цену
+            return $price - ($price * ($discount / 100));
+        }
+        
+        return $price;
+    }
 }
+

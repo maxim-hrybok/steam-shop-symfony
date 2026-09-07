@@ -27,9 +27,9 @@
                         {% endif %}
                         {{ item.product.name }}
                     </td>
-                    <td>${{ item.product.price|number_format(2) }}</td>
+                    <td>${{ item.product.getDiscountedPrice()|number_format(2) }}</td>
                     <td style="font-weight: bold;">x{{ item.quantity }}</td>
-                    <td style="font-weight: bold;">${{ (item.product.price * item.quantity)|number_format(2) }}</td>
+                    <td style="font-weight: bold;">${{ (item.product.getDiscountedPrice() * item.quantity)|number_format(2) }}</td>
                     <td>
                         <a href="{{ path('app_cart_remove', {'id': item.product.id}) }}" class="text-danger">Remove</a>
                     </td>

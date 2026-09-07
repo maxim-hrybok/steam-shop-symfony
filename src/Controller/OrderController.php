@@ -63,7 +63,7 @@ class OrderController extends AbstractController
             $orderItem->setPurchaseOrder($order);
             $orderItem->setProduct($product);
             $orderItem->setQuantity($quantityToBuy);
-            $orderItem->setPrice($product->getPrice());
+            $orderItem->setPrice($product->getDiscountedPrice());
             
             
             $product->setStock($product->getStock() - $quantityToBuy);
