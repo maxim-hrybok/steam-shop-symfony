@@ -2,6 +2,9 @@
 
 namespace App\Form;
 
+use App\Validator\Recaptcha;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -49,6 +52,13 @@ class RegistrationFormType extends AbstractType
                         max: 4096,
                     ),
                 ],
+            ])
+            // Add reCAPTCHA field to the form
+            ->add('captcha', HiddenType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new Recaptcha()
+                ]
             ])
         ;
     }
